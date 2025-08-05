@@ -1,19 +1,19 @@
 import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar/Navbar'
+import './styles/fonts.css';
+import './index.css';
 
 import Home from './pages/Home/Home'
-import Search from './pages/Search/Search'
+import Explore from './pages/Explore/Explore'
 import Login from './pages/Login/Login'
 import Favorites from './pages/Favorites/Favorites'
 
 function App() {
   return (
     <div className="app-container">
-      <Navbar />
-
+  
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
+        <Route path="/explore" element={<Explore />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/login" element={<Login />} />
       </Routes>
