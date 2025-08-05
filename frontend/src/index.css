@@ -1,4 +1,12 @@
+@import "./styles/fonts.css";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 :root {
+  --accent-font: "VeniteAdoremus", serif;
+  --main-font: "Montserrat", sans-serif;
+  --white: #f7f7f7;
+  --black: #191919;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
