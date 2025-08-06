@@ -1,4 +1,4 @@
-/* Default styles for nav */
+
 .navbar {
   position: absolute;
   top: 0;
@@ -10,7 +10,6 @@
   z-index: 1001;
 }
 
-/* NAV LINKS: Desktop default */
 .nav-links {
   display: flex;
   justify-content: center;
@@ -18,9 +17,9 @@
   gap: 32px;
 }
 
-/* NAV LINKS: Shared link styling */
+
 .navbar a {
-  color: var(--black);
+  color: #7e7d7d;
   text-decoration: none;
   font-size: 18px;
   font-family: var(--accent-font);
@@ -32,7 +31,7 @@
   color: var(--white);
 }
 
-/* Burger Menu */
+
 .menu-toggle {
   display: none;
 }
@@ -48,7 +47,7 @@
   z-index: 1100;
 }
 
-/* Mobile styles (≤600px) */
+
 @media screen and (max-width: 600px) {
   .burger {
     display: block;
@@ -78,7 +77,7 @@
 
   .navbar {
     justify-content: flex-end;
-    padding-right: 60px; /* gives space for burger icon */
+    padding-right: 60px; 
   }
   .navbar a {
     color: var(--white);
