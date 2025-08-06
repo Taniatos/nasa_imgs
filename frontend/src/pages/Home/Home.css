@@ -48,11 +48,12 @@
 }
 
 .background-container img {
-  height: 50vh;
-  width: 50vh;
+  height: 90vh;
+  width: 90vh;
   position: absolute;
   z-index: 3;
   right: 20px;
+  margin-top: 8px;
 }
 
 @keyframes move-background {
@@ -67,9 +68,8 @@ nav {
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 1001; 
+  z-index: 1001;
 }
-
 
 .home-content {
   z-index: 1000;
@@ -85,7 +85,7 @@ nav {
   font-size: 56px;
   line-height: 110%;
   color: var(--white);
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.531);
+  text-shadow: 2px 2px 14px rgba(0, 0, 0, 0.8);
   margin-bottom: 0;
 }
 
@@ -93,9 +93,12 @@ nav {
   font-family: var(--main-font);
   font-size: 20px;
   color: var(--white);
+  text-shadow: 16px 2px 14px rgb(13, 13, 13);
+  font-weight: 500;
+  margin-bottom: 52px;
 }
 
-/* Glassmorphism Search Bar */
+
 .search-glass {
   margin-top: 30px;
   display: flex;
@@ -147,11 +150,14 @@ nav {
     word-break: break-word;
   }
 }
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 1000px) {
   .background-container img {
-    height: 36vh;
-    width: 36vh;
-    right: 6px;
+    height: auto;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    right: unset;
+    margin-top: 16px;
   }
 }
 @media screen and (max-width: 600px) {
@@ -160,10 +166,6 @@ nav {
   }
   .search-input {
     width: 100%;
-  }
-  .background-container img {
-    height: 30vh;
-    width: 30vh;
   }
 }
 @media screen and (max-width: 420px) {
