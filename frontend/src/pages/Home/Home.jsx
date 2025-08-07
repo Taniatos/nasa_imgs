@@ -7,6 +7,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  // Navigates to the Explore page with the search term as a query parameter
   function handleSearch(e) {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <div className="home">
       <Navbar />
+      {/* The background is composed of multiple layered images for a parallax effect */}
       <div className="background-container">
         <img
           src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/moon2.png"
@@ -37,7 +39,9 @@ export default function Home() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button type="submit" className="search-button">→</button>
+            <button type="submit" className="search-button">
+              →
+            </button>
           </form>
         </div>
       </div>
