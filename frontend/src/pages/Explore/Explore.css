@@ -162,8 +162,12 @@
   border-bottom-right-radius: 16px;
 }
 
-
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
+  .explore-title {
+    width: 90%;
+    margin: 0 auto 24px auto;
+    line-height: 110%;
+  }
   .explore-card {
     width: 90%;
     height: auto;
