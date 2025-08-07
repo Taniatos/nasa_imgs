@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/Navbar/NavBar";
+import { useAuth } from "../../context/useAuth"; 
 import "./Login.css";
 
 export default function Login() {
+  // State to toggle between Login and Register forms
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -10,12 +13,12 @@ export default function Login() {
     password: "",
     repeatPassword: "",
   });
-
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
+  const { setUser } = useAuth(); 
   function handleChange(e) {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function validateEmail(email) {
@@ -28,6 +31,7 @@ export default function Login() {
     return passwordRegex.test(password);
   }
 
+  // Performs client-side validation before submitting the form
   function validate() {
     const errs = {};
     if (isRegister && !formData.name.trim()) errs.name = "Name is required.";
@@ -52,18 +56,41 @@ export default function Login() {
     return errs;
   }
 
-  function handleSubmit(e) {
+  // Form submission for both login and registration
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length === 0) {
-      if (isRegister) {
-        console.log("Registering:", formData);
-      } else {
-        console.log("Logging in:", formData);
-      }
+    setErrors({});
+
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
     }
-  }
+
+    try {
+      // Set the API endpoint based on whether the user is registering or logging in
+      const endpoint = isRegister ? "/api/auth/register" : "/api/auth/login";
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // After a successful login/registration, update the global user state
+        setUser(data.user);
+        // Upon successful login or registration, navigate to the Explore page
+        navigate("/explore");
+      } else {
+        const errorData = await response.json();
+        setErrors({ general: errorData.message || "An error occurred." });
+      }
+    } catch (error) {
+      console.error("Authentication failed:", error);
+      setErrors({ general: "An unexpected error occurred. Please try again." });
+    }
+  };
 
   return (
     <div className="login-page">
@@ -73,13 +100,18 @@ export default function Login() {
       <NavBar />
       <div className="login-container">
         <div className="login-form-wrapper">
-          <h2 className="login-title">{isRegister ? "Create Account" : "Welcome"}</h2>
+          <h2 className="login-title">
+            {isRegister ? "Create Account" : "Welcome"}
+          </h2>
           <p className="login-subtitle">
             {isRegister
               ? "Register to save your favorite NASA images"
               : "Log in to continue exploring space"}
           </p>
           <form className="login-form" onSubmit={handleSubmit} noValidate>
+            {errors.general && (
+              <div className="error-text">{errors.general}</div>
+            )}
             {isRegister && (
               <>
                 <input
@@ -109,7 +141,9 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
             />
-            {errors.password && <div className="error-text">{errors.password}</div>}
+            {errors.password && (
+              <div className="error-text">{errors.password}</div>
+            )}
             {isRegister && (
               <>
                 <input
@@ -120,14 +154,18 @@ export default function Login() {
                   value={formData.repeatPassword}
                   onChange={handleChange}
                 />
-                {errors.repeatPassword && <div className="error-text">{errors.repeatPassword}</div>}
+                {errors.repeatPassword && (
+                  <div className="error-text">{errors.repeatPassword}</div>
+                )}
               </>
             )}
             <button type="submit" className="login-button">
               {isRegister ? "Register" : "Login"}
             </button>
             <p className="register-prompt">
-              {isRegister ? "Already have an account?" : "Don’t have an account?"}{" "}
+              {isRegister
+                ? "Already have an account?"
+                : "Don’t have an account?"}{" "}
               <button
                 type="button"
                 className="toggle-link"
