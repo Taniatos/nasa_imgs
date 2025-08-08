@@ -1,37 +1,33 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-
+import { useAuth } from "../../context/useAuth";
 import "./NavBar.css";
 
 export default function NavBar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Get the user object from the global AuthContext
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
-  // On component mount, check if a user session exists on the server
-  useEffect(() => {
-    fetch("/api/auth/me", {
-      credentials: "include", // sends cookies with the request
-    })
-      .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data) => setIsAuthenticated(!!data.user))
-      .catch(() => setIsAuthenticated(false));
-  }, []);
+  // Determine authentication status from the presence of the user object
+  const isAuthenticated = !!user;
 
   // Handles the user logout process
   async function handleLogout(e) {
     e.preventDefault();
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-    // Update state and redirect to home page after logout
-    setIsAuthenticated(false);
-    navigate("/");
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      // Clear the user from the global state
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   }
 
   return (
     <nav className="navbar">
-      {/* Create a CSS-only hamburger menu for mobile */}
       <input type="checkbox" id="menu-toggle" className="menu-toggle" />
       <label htmlFor="menu-toggle" className="burger">
         &#9776;
@@ -42,7 +38,9 @@ export default function NavBar() {
         <Link to="/explore">Explore</Link>
         <Link to="/favorites">Favorites</Link>
 
-        {/* Conditionally render Logout or Login link based on auth state */}
+        {/* Conditionally render the Admin link only if the user exists and has the 'admin' role */}
+        {user && user.role === "admin" && <Link to="/admin">Admin</Link>}
+
         {isAuthenticated ? (
           <a href="#" onClick={handleLogout}>
             Logout
