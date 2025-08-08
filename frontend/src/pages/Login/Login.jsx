@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/Navbar/NavBar";
-import { useAuth } from "../../context/useAuth"; 
+import { useAuth } from "../../context/useAuth";
 import "./Login.css";
 
 export default function Login() {
-  // State to toggle between Login and Register forms
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -15,60 +14,18 @@ export default function Login() {
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { setUser } = useAuth(); 
+  const { setUser } = useAuth();
+
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function validatePassword(password) {
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
-    return passwordRegex.test(password);
-  }
-
-  // Performs client-side validation before submitting the form
-  function validate() {
-    const errs = {};
-    if (isRegister && !formData.name.trim()) errs.name = "Name is required.";
-
-    if (!formData.email.trim()) {
-      errs.email = "Email is required.";
-    } else if (!validateEmail(formData.email)) {
-      errs.email = "Invalid email format.";
-    }
-
-    if (!formData.password.trim()) {
-      errs.password = "Password is required.";
-    } else if (!validatePassword(formData.password)) {
-      errs.password =
-        "Password must be at least 8 characters and include a number and a special character.";
-    }
-
-    if (isRegister && formData.password !== formData.repeatPassword) {
-      errs.repeatPassword = "Passwords do not match.";
-    }
-
-    return errs;
-  }
-
-  // Form submission for both login and registration
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
-
     try {
-      // Set the API endpoint based on whether the user is registering or logging in
       const endpoint = isRegister ? "/api/auth/register" : "/api/auth/login";
       const response = await fetch(endpoint, {
         method: "POST",
@@ -78,10 +35,9 @@ export default function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        // After a successful login/registration, update the global user state
+        // Updates the global user state
         setUser(data.user);
-        // Upon successful login or registration, navigate to the Explore page
-        navigate("/explore");
+        navigate("/");
       } else {
         const errorData = await response.json();
         setErrors({ general: errorData.message || "An error occurred." });
@@ -113,16 +69,13 @@ export default function Login() {
               <div className="error-text">{errors.general}</div>
             )}
             {isRegister && (
-              <>
-                <input
-                  name="name"
-                  placeholder="Name"
-                  className="login-input"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                {errors.name && <div className="error-text">{errors.name}</div>}
-              </>
+              <input
+                name="name"
+                placeholder="Name"
+                className="login-input"
+                value={formData.name}
+                onChange={handleChange}
+              />
             )}
             <input
               name="email"
@@ -132,7 +85,6 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
             />
-            {errors.email && <div className="error-text">{errors.email}</div>}
             <input
               name="password"
               type="password"
@@ -141,23 +93,15 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
             />
-            {errors.password && (
-              <div className="error-text">{errors.password}</div>
-            )}
             {isRegister && (
-              <>
-                <input
-                  name="repeatPassword"
-                  type="password"
-                  placeholder="Repeat Password"
-                  className="login-input"
-                  value={formData.repeatPassword}
-                  onChange={handleChange}
-                />
-                {errors.repeatPassword && (
-                  <div className="error-text">{errors.repeatPassword}</div>
-                )}
-              </>
+              <input
+                name="repeatPassword"
+                type="password"
+                placeholder="Repeat Password"
+                className="login-input"
+                value={formData.repeatPassword}
+                onChange={handleChange}
+              />
             )}
             <button type="submit" className="login-button">
               {isRegister ? "Register" : "Login"}
@@ -169,10 +113,7 @@ export default function Login() {
               <button
                 type="button"
                 className="toggle-link"
-                onClick={() => {
-                  setIsRegister(!isRegister);
-                  setErrors({});
-                }}
+                onClick={() => setIsRegister(!isRegister)}
               >
                 {isRegister ? "Login" : "Register"}
               </button>
