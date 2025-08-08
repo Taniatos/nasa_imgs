@@ -101,6 +101,8 @@
   padding: 12px;
   border-radius: 12px;
   cursor: pointer;
+  text-transform: uppercase;
+  font-family: var(--accent-font);
 }
 
 .register-prompt {
@@ -117,6 +119,7 @@
   font-size: 14px;
   padding: 0;
   margin-left: 5px;
+  
 }
 
 .error-text {
