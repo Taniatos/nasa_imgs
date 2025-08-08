@@ -1,4 +1,7 @@
-.DS_Store
-/backend/node_modules
-backend/.DS_Store
 
+/backend/node_modules
+/frontend/node_modules
+backend/.DS_Store
+.DS_Store
+
+backend/.DS_Store
