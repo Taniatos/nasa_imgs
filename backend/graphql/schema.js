@@ -28,7 +28,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(FavoriteType),
       // The resolver function fetches the data from the database
       resolve(parent, args) {
-        return Favorite.find();
+        return Favorite.find().exec();
       },
     },
   },
