@@ -1,68 +1,85 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import session from 'express-session'
-import passport from 'passport'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import cookieParser from 'cookie-parser'
-import { createHandler } from 'graphql-http/lib/use/express'
-import graphqlSchema from './graphql/schema.js'
+import express from "express";
+import mongoose from "mongoose";
+import session from "express-session";
+import passport from "passport";
+import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import http from "http";
 
-import './config/passport.js'
-import authRoutes from './routes/api/auth.js'
-import favoritesRoutes from './routes/api/favorites.js'
-import adminRoutes from './routes/api/admin.js' 
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4"; 
 
-dotenv.config()
+import graphqlSchema from "./graphql/schema.js";
+import "./config/passport.js";
+import authRoutes from "./routes/api/auth.js";
+import favoritesRoutes from "./routes/api/favorites.js";
+import adminRoutes from "./routes/api/admin.js";
 
-const app = express()
-const PORT = process.env.PORT || 5050
+dotenv.config();
 
-// CORS setup
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}))
+const app = express();
+const PORT = process.env.PORT || 5050;
 
-// Body parsers
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
-
-// Sessions
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    httpOnly: true,
-    sameSite: 'lax'
-  }
-}))
-
-// Passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
-
-// Routes
-app.use('/api/auth', authRoutes)
-app.use('/api/favorites', favoritesRoutes)
-app.use('/api/admin', adminRoutes) 
-
-// GraphQL
-app.all('/graphql', createHandler({
+// Create the Apollo Server instance
+const apolloServer = new ApolloServer({
   schema: graphqlSchema,
-  graphiql: true
-}));
+});
 
+// The server must be started asynchronously
+async function startServer() {
+  await apolloServer.start();
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('MongoDB connected')
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`)
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      credentials: true,
     })
-  })
-  .catch(err => console.error('Mongo error:', err))
+  );
+
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: false,
+        httpOnly: true,
+        sameSite: "lax",
+      },
+    })
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  app.use("/api/auth", authRoutes);
+  app.use("/api/favorites", favoritesRoutes);
+  app.use("/api/admin", adminRoutes);
+
+  // Apollo Server middleware
+  app.use(
+    "/graphql",
+    express.json(),
+    expressMiddleware(apolloServer) 
+  );
+
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log("MongoDB connected");
+      app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+        console.log(
+          `GraphQL endpoint ready at http://localhost:${PORT}/graphql`
+        );
+      });
+    })
+    .catch((err) => console.error("Mongo error:", err));
+}
+
+startServer();
