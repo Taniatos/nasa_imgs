@@ -20,6 +20,7 @@ import adminRoutes from "./routes/api/admin.js";
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 5050;
 
 // Create the Apollo Server instance
