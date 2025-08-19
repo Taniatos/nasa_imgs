@@ -26,7 +26,10 @@ export default function Login() {
     setErrors({});
 
     try {
-      const endpoint = isRegister ? "/api/auth/register" : "/api/auth/login";
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const endpoint = isRegister
+        ? `${apiBaseUrl}/api/auth/register`
+        : `${apiBaseUrl}/api/auth/login`;
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
