@@ -5,6 +5,7 @@ import passport from "passport";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import MongoStore from 'connect-mongo';
 import http from "http";
 
 import { ApolloServer } from "@apollo/server";
