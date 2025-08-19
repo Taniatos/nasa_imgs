@@ -31,11 +31,11 @@ async function startServer() {
   await apolloServer.start();
 
   app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN, 
-    credentials: true,
-  })
-);
+    cors({
+      origin: process.env.CORS_ORIGIN,
+      credentials: true,
+    })
+  );
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -46,10 +46,14 @@ async function startServer() {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+      }),
       cookie: {
-        secure: false,
+        secure: process.env.NODE_ENV === "production",
         httpOnly: true,
         sameSite: "lax",
+        maxAge: 1000 * 60 * 60 * 24,
       },
     })
   );
