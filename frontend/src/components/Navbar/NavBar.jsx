@@ -14,7 +14,7 @@ export default function NavBar() {
   async function handleLogout(e) {
     e.preventDefault();
     try {
-      await fetch("/api/auth/logout", {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
