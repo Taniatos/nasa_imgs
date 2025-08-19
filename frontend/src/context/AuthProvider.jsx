@@ -8,7 +8,9 @@ export function AuthProvider({ children }) {
 
   // When the app first loads, check if there's an active session on the server
   useEffect(() => {
-    fetch("/api/auth/me", { credentials: "include" })
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
+      credentials: "include",
+    })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.user) setUser(data.user);
