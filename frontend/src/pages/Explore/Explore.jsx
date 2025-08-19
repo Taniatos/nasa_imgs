@@ -24,9 +24,12 @@ export default function Explore() {
     if (user) {
       async function fetchFavorites() {
         try {
-          const response = await fetch("/api/favorites", {
-            credentials: "include",
-          });
+          const response = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/favorites`,
+            {
+              credentials: "include",
+            }
+          );
           if (response.ok) {
             const data = await response.json();
             setFavorites(data);
@@ -80,7 +83,7 @@ export default function Explore() {
     }
     // If loading is complete and there is no user, redirect to the login page
     if (!user) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
@@ -100,10 +103,15 @@ export default function Explore() {
       const favoriteToDelete = favorites.find((fav) => fav.nasaId === nasaId);
       if (!favoriteToDelete) return;
       try {
-        const response = await fetch(`/api/favorites/${favoriteToDelete._id}`, {
-          method: "DELETE",
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/favorites/${
+            favoriteToDelete._id
+          }`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
           setFavorites((prevFavorites) =>
@@ -118,12 +126,15 @@ export default function Explore() {
     } else {
       // If not in favorites, send a POST request to add it
       try {
-        const response = await fetch("/api/favorites", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nasaId, title, imageUrl: img }),
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/favorites`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nasaId, title, imageUrl: img }),
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
           const newFavorite = await response.json();
