@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 import http from "http";
 
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4"; 
+import { expressMiddleware } from "@apollo/server/express4";
 
 import graphqlSchema from "./graphql/schema.js";
 import "./config/passport.js";
@@ -31,11 +31,11 @@ async function startServer() {
   await apolloServer.start();
 
   app.use(
-    cors({
-      origin: "http://localhost:5173",
-      credentials: true,
-    })
-  );
+  cors({
+    origin: process.env.CORS_ORIGIN, 
+    credentials: true,
+  })
+);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -62,11 +62,7 @@ async function startServer() {
   app.use("/api/admin", adminRoutes);
 
   // Apollo Server middleware
-  app.use(
-    "/graphql",
-    express.json(),
-    expressMiddleware(apolloServer) 
-  );
+  app.use("/graphql", express.json(), expressMiddleware(apolloServer));
 
   mongoose
     .connect(process.env.MONGO_URI)
