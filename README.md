@@ -2,11 +2,12 @@
 
 ## Project Description
 
-The **NASA Image Explorer** is a full-stack web application that allows users to search, view, and save images from NASA’s public image API. Built with **React (Vite)** on the frontend and **Node.js + Express + MongoDB** on the backend, the app features:
+The **NASA Image Explorer** is a full-stack web application that allows users to search, view, and save their favorite images from NASA’s public image API. It features a secure and persistent authentication system using Passport.js and a MongoDB session store, ensuring that user data and saved favorites are always protected. The backend is architected with both a RESTful API for standard operations and a read-only GraphQL endpoint for flexible data queries.
 
-- User authentication via **Passport.js**
-- Session-based login persistence
-- Protected routes and secure access control
+### **Live Application**
+
+- **Frontend (Netlify):** [https://nasa-images-explorer.netlify.app/](https://nasa-images-explorer.netlify.app/)
+- **Backend (Render):** [https://nasa-imgs.onrender.com/](https://nasa-imgs.onrender.com/)
 
 ---
 
@@ -22,96 +23,17 @@ The **NASA Image Explorer** is a full-stack web application that allows users to
 
 ## Tech Stack
 
-| Layer      | Tools / Libraries                 |
-| ---------- | --------------------------------- |
-| Frontend   | React (Vite), CSS Modules         |
-| Backend    | Node.js, Express, PassportJS      |
-| Database   | MongoDB + Mongoose                |
-| Auth       | express-session, passport-local   |
-| API Format | RESTful API + GraphQL (read-only) |
+| Layer              | Tools & Libraries                                                       |
+| ------------------ | ----------------------------------------------------------------------- |
+| **Frontend**       | React (Vite), CSS, React Router                                         |
+| **Backend**        | Node.js, Express, Passport.js                                           |
+| **Database**       | MongoDB, Mongoose                                                       |
+| **Authentication** | `express-session`, `passport-local`, `connect-mongo`                    |
+| **API Formats**    | RESTful API & GraphQL (read-only)                                       |
+| **Deployment**     | **Frontend:** Netlify, **Backend:** Render, **Database:** MongoDB Atlas |
 
 ---
 
-## Getting Started
+## Getting Started with the Live App
 
-### Prerequisites
-
-There's a need to have the following installed:
-
-- [Node.js](https://nodejs.org/) (v18+ recommended)
-- npm (comes with Node)
-- MongoDB (local instance running on default port `27017`)
-
----
-
-## Database Initialization
-
-To initialize the database with two default users, run the seeder script from the backend directory.
-
-```Bash
-# Navigate to the backend folder
-cd backend
-
-# Install dependencies
-npm install
-
-# Run the seeder script
-npm run seed
-```
-
-This will create the following two users in the database:
-
-- User 1:
-
-```Bash
-Email: user@example.com
-Password: password123!
-```
-
-- User 2
-
-```Bash
-Email: user2@example.com
-Password: password234!
-```
-
-Note: You could also manually register users via the frontend after the application setup:
-
-1. Navigate to the **Login page**
-2. Click **Register**
-3. Indicate the name, email address and password and follow suggestions if needed.
-
----
-
-### Backend Setup
-
-Open a terminal window and navigate to the backend directory.
-
-```bash
-# Navigate to backend folder
-cd backend
-
-# Install dependencies
-npm install
-
-# Start backend server (http://localhost:5050)
-npm start
-
-```
-
----
-
-### Frontend Setup
-
-Open a second terminal window and navigate to the frontend directory.
-
-```bash
-# Navigate to frontend folder
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start frontend (http://localhost:5173)
-npm run dev
-```
+To explore the application, simply visit the live [site](https://nasa-images-explorer.netlify.app/). You can create a new account by navigating to the **Login** page and clicking **Register**.
