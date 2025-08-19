@@ -24,9 +24,12 @@ function Favorites() {
     // If there is a user, proceed to fetch their favorites
     async function fetchFavorites() {
       try {
-        const favoritesResponse = await fetch("/api/favorites", {
-          credentials: "include",
-        });
+        const favoritesResponse = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/favorites`,
+          {
+            credentials: "include",
+          }
+        );
         if (favoritesResponse.ok) {
           const data = await favoritesResponse.json();
           setFavorites(data);
@@ -43,10 +46,13 @@ function Favorites() {
 
   const handleDeleteFavorite = async (id) => {
     try {
-      const response = await fetch(`/api/favorites/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/favorites/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         setFavorites(favorites.filter((fav) => fav._id !== id));
       } else {
