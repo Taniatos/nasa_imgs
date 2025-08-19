@@ -27,7 +27,10 @@ export default function Admin() {
     // If the user is confirmed to be an admin, fetch the list of all users
     const fetchUsers = async () => {
       try {
-        const res = await fetch("/api/admin/users", { credentials: "include" });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/admin/users`,
+          { credentials: "include" }
+        );
         if (res.ok) {
           const data = await res.json();
           setUsers(data);
@@ -50,9 +53,12 @@ export default function Admin() {
       return;
     }
     try {
-      const res = await fetch(`/api/admin/favorites/${userId}`, {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin/favorites/${userId}`,
+        {
+          credentials: "include",
+        }
+      );
       if (res.ok) {
         const data = await res.json();
         const userToSelect = users.find((u) => u._id === userId);
@@ -97,7 +103,9 @@ export default function Admin() {
 
         {selectedUser && (
           <div className="favorites-container">
-            <h3>Favorites for <strong>{selectedUser.email}</strong></h3>
+            <h3>
+              Favorites for <strong>{selectedUser.email}</strong>
+            </h3>
             {favorites.length > 0 ? (
               <div className="favorites-grid-admin">
                 {favorites.map((fav) => (
