@@ -20,7 +20,9 @@ export function AuthProvider({ children }) {
   if (loading) {
     return (
       <div className="loading-container">
-        <p>Loading NASA Image Explorer...</p>
+        <p>
+          <center>Loading NASA Image Explorer...</center>
+        </p>
       </div>
     );
   }
